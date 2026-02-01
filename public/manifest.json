@@ -1,4 +1,5 @@
 {
+  "$schema": "https://www.schemastore.org/chrome-manifest.json",
   "manifest_version": 3,
   "name": "Countdown Notification",
   "version": "1.0.0",
