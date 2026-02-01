@@ -1,0 +1,29 @@
+{
+  "name": "countdown-notification-chrome-extension",
+  "version": "1.0.0",
+  "description": "A Chrome extension that detects countdown timers on web pages and notifies users when they complete",
+  "scripts": {
+    "build": "webpack --mode production",
+    "dev": "webpack --mode development --watch",
+    "lint": "eslint src --ext .ts"
+  },
+  "keywords": [
+    "chrome-extension",
+    "countdown",
+    "timer",
+    "notification"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chrome": "^0.0.268",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "eslint": "^8.45.0",
+    "ts-loader": "^9.4.4",
+    "typescript": "^5.1.6",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
+  }
+}
