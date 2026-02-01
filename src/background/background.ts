@@ -59,7 +59,7 @@ function handleMessage(
       console.log(`Background: New countdown detected with ${message.timer.currentSeconds}s remaining`);
       break;
       
-    case MessageType.COUNTDOWN_UPDATED:
+    case MessageType.COUNTDOWN_UPDATED: {
       // Update the timer state
       const existingTimer = globalTimers.get(message.timer.id);
       if (existingTimer) {
@@ -67,8 +67,9 @@ function handleMessage(
         console.log(`Background: Timer updated: ${message.timer.currentSeconds}s remaining`);
       }
       break;
+    }
       
-    case MessageType.COUNTDOWN_COMPLETED:
+    case MessageType.COUNTDOWN_COMPLETED: {
       // Show notification for completed countdown
       showNotification(message.timer);
       
@@ -80,6 +81,7 @@ function handleMessage(
       
       console.log(`Background: Timer completed: ${message.timer.displayText}`);
       break;
+    }
       
     default:
       console.warn('Background: Unknown message type:', message);
