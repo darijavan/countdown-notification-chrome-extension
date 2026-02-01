@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Timer Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .timer-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .timer-label {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+        .timer-display {
+            font-size: 48px;
+            font-weight: bold;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+        .timer-display.completed {
+            background: rgba(76, 175, 80, 0.3);
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .info {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+        button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <h1>🕐 Countdown Timer Test Page</h1>
+    
+    <div class="info">
+        <p>This page contains multiple countdown timers in different formats.</p>
+        <p>Install the Countdown Notification extension to get notified when they complete!</p>
+        <button onclick="resetAllTimers()">Reset All Timers</button>
+    </div>
+
+    <div class="timer-container">
+        <div class="timer-label">Format: HH:MM:SS (1 minute countdown)</div>
+        <div class="timer-display" id="timer1">00:01:00</div>
+    </div>
+
+    <div class="timer-container">
+        <div class="timer-label">Format: MM:SS (30 seconds countdown)</div>
+        <div class="timer-display" id="timer2">00:30</div>
+    </div>
+
+    <div class="timer-container">
+        <div class="timer-label">Format: Seconds only (15 seconds countdown)</div>
+        <div class="timer-display" id="timer3">15</div>
+    </div>
+
+    <div class="timer-container">
+        <div class="timer-label">Format: Text with units (45 seconds countdown)</div>
+        <div class="timer-display" id="timer4">45 seconds</div>
+    </div>
+
+    <div class="timer-container">
+        <div class="timer-label">Format: Mixed units (2 minutes countdown)</div>
+        <div class="timer-display" id="timer5">2 minutes 0 seconds</div>
+    </div>
+
+    <script>
+        // Timer configurations: [elementId, initialSeconds, format]
+        const timers = [
+            { id: 'timer1', seconds: 60, format: 'HHMMSS' },
+            { id: 'timer2', seconds: 30, format: 'MMSS' },
+            { id: 'timer3', seconds: 15, format: 'SECONDS' },
+            { id: 'timer4', seconds: 45, format: 'TEXT_SECONDS' },
+            { id: 'timer5', seconds: 120, format: 'TEXT_MIXED' }
+        ];
+
+        function formatTime(seconds, format) {
+            if (seconds < 0) seconds = 0;
+            
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            const s = seconds % 60;
+
+            const pad = (num) => String(num).padStart(2, '0');
+
+            switch (format) {
+                case 'HHMMSS':
+                    return `${pad(h)}:${pad(m)}:${pad(s)}`;
+                case 'MMSS':
+                    return `${pad(m)}:${pad(s)}`;
+                case 'SECONDS':
+                    return String(seconds);
+                case 'TEXT_SECONDS':
+                    return `${seconds} second${seconds !== 1 ? 's' : ''}`;
+                case 'TEXT_MIXED':
+                    if (m > 0 && s > 0) {
+                        return `${m} minute${m !== 1 ? 's' : ''} ${s} second${s !== 1 ? 's' : ''}`;
+                    } else if (m > 0) {
+                        return `${m} minute${m !== 1 ? 's' : ''}`;
+                    } else {
+                        return `${s} second${s !== 1 ? 's' : ''}`;
+                    }
+                default:
+                    return String(seconds);
+            }
+        }
+
+        function updateTimer(timer) {
+            const element = document.getElementById(timer.id);
+            if (!element) return;
+
+            element.textContent = formatTime(timer.seconds, timer.format);
+
+            if (timer.seconds === 0) {
+                element.classList.add('completed');
+            } else {
+                element.classList.remove('completed');
+                timer.seconds--;
+            }
+        }
+
+        function updateAllTimers() {
+            timers.forEach(updateTimer);
+        }
+
+        function resetAllTimers() {
+            timers[0].seconds = 60;
+            timers[1].seconds = 30;
+            timers[2].seconds = 15;
+            timers[3].seconds = 45;
+            timers[4].seconds = 120;
+            
+            timers.forEach(timer => {
+                const element = document.getElementById(timer.id);
+                element.classList.remove('completed');
+                updateTimer(timer);
+            });
+        }
+
+        // Initialize timers
+        timers.forEach(updateTimer);
+
+        // Update every second
+        setInterval(updateAllTimers, 1000);
+
+        console.log('Countdown test page loaded. Extension should detect these timers!');
+    </script>
+</body>
+</html>
