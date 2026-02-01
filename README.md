@@ -78,12 +78,12 @@ countdown-notification-chrome-extension/
 
 2. **Install dependencies**
    ```bash
-   npm install
+   pnpm install
    ```
 
 3. **Build the extension**
    ```bash
-   npm run build
+   pnpm run build
    ```
 
 4. **Load in Chrome**
@@ -96,7 +96,7 @@ countdown-notification-chrome-extension/
 
 1. Build the extension:
    ```bash
-   npm run build
+   pnpm run build
    ```
 
 2. The `dist` folder contains the complete extension ready to be loaded or packaged.
@@ -117,9 +117,9 @@ countdown-notification-chrome-extension/
 
 ### Available Scripts
 
-- `npm run build` - Build for production (minified)
-- `npm run dev` - Build for development with watch mode
-- `npm run lint` - Run ESLint to check code quality
+- `pnpm run build` - Build for production (minified)
+- `pnpm run dev` - Build for development with watch mode
+- `pnpm run lint` - Run ESLint to check code quality
 
 ### Testing
 

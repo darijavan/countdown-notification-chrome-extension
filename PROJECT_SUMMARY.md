@@ -103,15 +103,15 @@ countdown-notification-chrome-extension/
 ## Installation Instructions
 
 1. Clone the repository
-2. Run `npm install` to install dependencies
-3. Run `npm run build` to build the extension
+2. Run `pnpm install` to install dependencies
+3. Run `pnpm run build` to build the extension
 4. Load the `dist` folder as an unpacked extension in Chrome
 
 ## Development Commands
 
-- `npm run build` - Build for production
-- `npm run dev` - Build with watch mode
-- `npm run lint` - Run ESLint
+- `pnpm run build` - Build for production
+- `pnpm run dev` - Build with watch mode
+- `pnpm run lint` - Run ESLint
 
 ## Browser Compatibility
 
@@ -175,7 +175,7 @@ countdown-notification-chrome-extension/
 - **Bundler**: ts-loader
 - **Linter**: ESLint with TypeScript plugin
 - **Extension Platform**: Chrome Manifest V3
-- **Package Manager**: npm
+- **Package Manager**: pnpm
 
 ## Repository Information
 

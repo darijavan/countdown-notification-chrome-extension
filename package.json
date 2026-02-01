@@ -2,6 +2,7 @@
   "name": "countdown-notification-chrome-extension",
   "version": "1.0.0",
   "description": "A Chrome extension that detects countdown timers on web pages and notifies users when they complete",
+  "packageManager": "pnpm@9.0.0",
   "scripts": {
     "build": "webpack --mode production",
     "dev": "webpack --mode development --watch",
