@@ -68,10 +68,12 @@ interface PotentialTimer {
 
 ### Validation Logic
 ```typescript
-// Require at least 2 observations over 2 seconds
-potentialTimer.observations >= 2 && 
-timeSinceFirstSeen >= 2000 && 
-seconds < potentialTimer.firstSeenSeconds
+// Require at least 2 observations over 2 seconds and must show decreasing behavior
+if (potentialTimer.observations >= MIN_OBSERVATIONS_FOR_CONFIRMATION && 
+    timeSinceFirstSeen >= MIN_TIME_FOR_CONFIRMATION_MS && 
+    hasDecreased) {
+  // Promote to confirmed timer
+}
 ```
 
 ## Impact

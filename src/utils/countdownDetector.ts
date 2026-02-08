@@ -17,6 +17,13 @@ export const DEFAULT_CONFIG: CountdownConfig = {
 };
 
 /**
+ * Validation thresholds for confirming countdown timers
+ */
+const MIN_OBSERVATIONS_FOR_CONFIRMATION = 2;
+const MIN_TIME_FOR_CONFIRMATION_MS = 2000;
+const POTENTIAL_TIMER_STALE_THRESHOLD_MS = 10000;
+
+/**
  * Potential timer that needs validation
  */
 interface PotentialTimer {
@@ -84,7 +91,9 @@ export class CountdownDetector {
           const timeSinceFirstSeen = now - potentialTimer.firstSeenAt;
           const hasDecreased = seconds < potentialTimer.firstSeenSeconds;
           
-          if (potentialTimer.observations >= 2 && timeSinceFirstSeen >= 2000 && hasDecreased) {
+          if (potentialTimer.observations >= MIN_OBSERVATIONS_FOR_CONFIRMATION && 
+              timeSinceFirstSeen >= MIN_TIME_FOR_CONFIRMATION_MS && 
+              hasDecreased) {
             // Promote to confirmed timer
             const timer: CountdownTimer = {
               id,
@@ -118,7 +127,7 @@ export class CountdownDetector {
     
     // Clean up stale potential timers (older than 10 seconds)
     for (const [id, potential] of this.potentialTimers.entries()) {
-      if (now - potential.lastSeenAt > 10000) {
+      if (now - potential.lastSeenAt > POTENTIAL_TIMER_STALE_THRESHOLD_MS) {
         this.potentialTimers.delete(id);
       }
     }
