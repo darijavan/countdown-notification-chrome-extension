@@ -36,12 +36,15 @@ export function parseTimeToSeconds(text: string): number | null {
     }
   }
   
-  // Pattern 2: Just seconds (pure number)
+  // Pattern 2: Just seconds (pure number) - be more restrictive
+  // Only accept if it's the ONLY content in the text (no other text around it)
+  // This prevents matching parts of view counts, etc.
   const pureNumberPattern = /^\d{1,5}$/;
   if (pureNumberPattern.test(cleaned)) {
     const seconds = parseInt(cleaned, 10);
-    // Only consider it a countdown if it's a reasonable range
-    if (seconds > 0 && seconds <= 86400) { // Max 24 hours
+    // Only consider it a countdown if it's in a reasonable range (10-3600 seconds)
+    // This filters out single digits and very large numbers
+    if (seconds >= 10 && seconds <= 3600) { // 10 seconds to 1 hour
       return seconds;
     }
   }

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube-like Test Page - False Positive Detection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #065fd4;
+            margin-top: 0;
+        }
+        .video-card {
+            display: inline-block;
+            width: 200px;
+            margin: 10px;
+            vertical-align: top;
+        }
+        .thumbnail {
+            width: 200px;
+            height: 112px;
+            background: #ddd;
+            position: relative;
+            border-radius: 8px;
+        }
+        .duration {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 2px 4px;
+            border-radius: 2px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .view-count {
+            font-size: 12px;
+            color: #606060;
+            margin-top: 5px;
+        }
+        .real-countdown {
+            background: #ffd700;
+            padding: 20px;
+            text-align: center;
+            font-size: 48px;
+            font-weight: bold;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .badge {
+            display: inline-block;
+            background: #606060;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 2px;
+            font-size: 11px;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎬 YouTube-like Test Page</h1>
+    
+    <div class="info">
+        <strong>Test Purpose:</strong> This page simulates YouTube elements that should NOT trigger countdown notifications.
+        <br>With the improved detection, these should be ignored as false positives:
+        <ul>
+            <li>Video durations (timestamps on thumbnails)</li>
+            <li>View counts that change</li>
+            <li>Subscriber counts</li>
+            <li>Random changing numbers</li>
+        </ul>
+        <strong>Only the REAL countdown at the bottom should trigger a notification!</strong>
+    </div>
+
+    <div class="section">
+        <h2>📹 Video Thumbnails (Should NOT trigger)</h2>
+        <p>These video cards have durations (like 10:30) that look like timers but don't count down:</p>
+        
+        <div class="video-card">
+            <div class="thumbnail">
+                <span class="duration">10:30</span>
+            </div>
+            <div class="view-count">1.2M views</div>
+        </div>
+        
+        <div class="video-card">
+            <div class="thumbnail">
+                <span class="duration">5:45</span>
+            </div>
+            <div class="view-count">856K views</div>
+        </div>
+        
+        <div class="video-card">
+            <div class="thumbnail">
+                <span class="duration">15:22</span>
+            </div>
+            <div class="view-count">2.3M views</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>👀 Changing Numbers (Should NOT trigger)</h2>
+        <p>These numbers change frequently but aren't countdowns:</p>
+        
+        <div style="padding: 10px; background: #f0f0f0; margin: 10px 0; border-radius: 5px;">
+            <strong>Channel Stats:</strong><br>
+            Subscribers: <span id="subscribers" class="badge">1234567</span><br>
+            Video views: <span id="video-views" class="badge">9876543</span><br>
+            Random number: <span id="random-num" class="badge">42</span>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>✅ REAL Countdown (SHOULD trigger after 2 seconds)</h2>
+        <p>This is an actual countdown that should be detected and notify you:</p>
+        
+        <div class="real-countdown" id="real-countdown">
+            00:30
+        </div>
+        <p style="text-align: center; color: #666;">
+            ⬆️ This should be detected as a countdown timer after observing it decrease
+        </p>
+    </div>
+
+    <script>
+        // Simulate random changes to non-countdown numbers
+        function randomizeNumbers() {
+            // Subscriber count changes randomly
+            const subscribers = document.getElementById('subscribers');
+            const currentSubs = parseInt(subscribers.textContent);
+            subscribers.textContent = currentSubs + Math.floor(Math.random() * 10) - 5;
+            
+            // Video views change
+            const views = document.getElementById('video-views');
+            const currentViews = parseInt(views.textContent);
+            views.textContent = currentViews + Math.floor(Math.random() * 100);
+            
+            // Random number changes
+            const randomNum = document.getElementById('random-num');
+            randomNum.textContent = Math.floor(Math.random() * 100);
+        }
+
+        // Run random changes every second to simulate YouTube's dynamic content
+        setInterval(randomizeNumbers, 1000);
+
+        // Real countdown timer (should be detected)
+        let countdownSeconds = 30;
+        const countdownElement = document.getElementById('real-countdown');
+
+        function updateRealCountdown() {
+            if (countdownSeconds < 0) countdownSeconds = 0;
+            
+            const minutes = Math.floor(countdownSeconds / 60);
+            const seconds = countdownSeconds % 60;
+            countdownElement.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            
+            if (countdownSeconds > 0) {
+                countdownSeconds--;
+            } else {
+                countdownElement.style.background = '#4caf50';
+                countdownElement.textContent = 'COMPLETE! 🎉';
+            }
+        }
+
+        setInterval(updateRealCountdown, 1000);
+        updateRealCountdown(); // Initial call
+
+        console.log('YouTube-like test page loaded. Extension should ONLY detect the real countdown!');
+    </script>
+</body>
+</html>
